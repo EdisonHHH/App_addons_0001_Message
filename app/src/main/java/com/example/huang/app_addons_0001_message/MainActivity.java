@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.view.View;
 import android.util.Log;
+import android.os.HandlerThread;
         ;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,11 +19,14 @@ public class MainActivity extends AppCompatActivity {
         private final String TAG="MessageText";
         private int ButtonCount=0;
 
-        //private Thread myThread;
+     /*   //private Thread myThread;
         private MyThread myThread2;
-
         private Handler mHandler;
+    */
         private int mMessageCount=0;
+
+        private HandlerThread myThread3;
+        private Handler mHandler3;
     /*
         class MyRunnable implements Runnable{
             public void run() {
@@ -39,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         */
-
+/*
         class MyThread extends Thread{
             private Looper mLooper;
             public void run(){
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 return mLooper;
             }
         }
+        */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,14 +85,23 @@ public class MainActivity extends AppCompatActivity {
                 // Perform action on click
                 Log.d(TAG,"send Message"+ButtonCount);
                 ButtonCount++;
-                Message msg=new Message();
+             /*   Message msg=new Message();
                 mHandler.sendMessage(msg);
+*/
+                mHandler3.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG,"get Message for thread3"+mMessageCount);
+                        mMessageCount++;
+                    }
+                });
             }
         });
 /*
         myThread=new Thread(new MyRunnable(),"MessageTestThread");
         myThread.start();
         */
+        /*
         myThread2=new MyThread();
         myThread2.start();
 
@@ -99,6 +113,10 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        */
+        myThread3=new HandlerThread("MessageTestThread3");
+        myThread3.start();
+        mHandler3=new Handler(myThread3.getLooper());
     }
 
     @Override
